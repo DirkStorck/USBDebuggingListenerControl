@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">USB Debugging Listener Control</string>
+    <string name="activity_settings_title">USB Debugging Listener Control</string>
+    <string name="activity_settings_description">Enable or disable the USBDebuggingListener</string>
+    <string name="activity_settings_checkbox">If checked the listener is enabled.</string>
+    <string name="xposed_description">Enables or disables the USBDebuggingListener. In some cases the logcat get spamed by an "java.io.IOException: Connection refused" in "com.android.server.usb.UsbDebuggingManager.listenToSocket()"</string>
+</resources>
