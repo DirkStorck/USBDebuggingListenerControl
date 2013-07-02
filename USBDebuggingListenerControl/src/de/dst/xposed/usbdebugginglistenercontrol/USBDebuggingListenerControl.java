@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.IXposedHookZygoteInit;
+import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
@@ -16,7 +17,7 @@ public class USBDebuggingListenerControl implements IXposedHookZygoteInit, IXpos
 	public static final String PREFS = "USBDebuggingListenerControlSettings";
 	public static final String PREF_ListenerEnabled = "ListenerEnabled";
 	
-	private static final String PACKAGE_NAME = "com.android.server.usb";
+	private static final String PACKAGE_NAME = "android";
 
 	private SharedPreferences prefs;
 
@@ -39,11 +40,12 @@ public class USBDebuggingListenerControl implements IXposedHookZygoteInit, IXpos
 				boolean listenerEnabled = prefs.getBoolean(PREF_ListenerEnabled, true);
 				LogUtil.logDebug(listenerEnabled ? "Listener is enabled" : "Listener is disabled", true, true);
 				if(!listenerEnabled) {
-					XposedHelpers.findAndHookMethod(PACKAGE_NAME + ".UsbDebuggingManager", lpparam.classLoader, "listenToSocket", XC_MethodReplacement.DO_NOTHING);
+					XC_MethodHook.Unhook methode = XposedHelpers.findAndHookMethod("com.android.server.usb.UsbDebuggingManager", lpparam.classLoader, "listenToSocket", XC_MethodReplacement.DO_NOTHING);
+					LogUtil.logDebug(methode != null ? "Methode found" : "Methode not found", true, true);
 				}	
 			}
 			catch (Throwable t) { 
-				LogUtil.logError("Error during disable of Methode: " + PACKAGE_NAME + ".UsbDebuggingManager.listenToSocket()", t, true, true); 
+				LogUtil.logError("Error during disable of Methode: com.android.server.usb.UsbDebuggingManager.UsbDebuggingManager.listenToSocket()", t, true, true); 
 			}
 		} else {
 //			LogUtil.logDebug(lpparam.packageName, true, true);
