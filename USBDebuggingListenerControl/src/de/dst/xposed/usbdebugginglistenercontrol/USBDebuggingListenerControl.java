@@ -40,7 +40,9 @@ public class USBDebuggingListenerControl implements IXposedHookZygoteInit, IXpos
 				boolean listenerEnabled = prefs.getBoolean(PREF_ListenerEnabled, true);
 				LogUtil.logDebug(listenerEnabled ? "Listener is enabled" : "Listener is disabled", true, true);
 				if(!listenerEnabled) {
-					XC_MethodHook.Unhook methode = XposedHelpers.findAndHookMethod("com.android.server.usb.UsbDebuggingManager", lpparam.classLoader, "listenToSocket", XC_MethodReplacement.DO_NOTHING);
+//					XC_MethodHook.Unhook methode = XposedHelpers.findAndHookMethod("com.android.server.usb.UsbDebuggingManager", lpparam.classLoader, "listenToSocket", XC_MethodReplacement.DO_NOTHING);
+					// Thanks to Tungstwenty (http://forum.xda-developers.com/member.php?u=4322181)
+					XC_MethodHook.Unhook methode = XposedHelpers.findAndHookMethod("com.android.server.usb.UsbDebuggingManager", lpparam.classLoader, "run", XC_MethodReplacement.DO_NOTHING);
 					LogUtil.logDebug(methode != null ? "Methode found" : "Methode not found", true, true);
 				}	
 			}
