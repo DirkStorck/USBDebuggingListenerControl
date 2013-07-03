@@ -17,13 +17,17 @@ public class USBDebuggingListenerControl implements IXposedHookZygoteInit, IXpos
 	public static final String PREFS = "USBDebuggingListenerControlSettings";
 	public static final String PREF_ListenerEnabled = "ListenerEnabled";
 	
+	/* 
+	 * Thanks to OXINARF (http://forum.xda-developers.com/member.php?u=4670128)
+	 * for helping me with the right package to use.
+	 */
 	private static final String PACKAGE_NAME = "android";
 
 	private SharedPreferences prefs;
 
 	@Override
 	public void initZygote(StartupParam startupParam) throws Throwable {
-		LogUtil.logDebug("Starting up and getting preferences", true, true);
+		LogUtil.logDebug("Starting up and getting preferences", true, false);
 		prefs = AndroidAppHelper.getSharedPreferencesForPackage(MY_PACKAGE_NAME, PREFS, Context.MODE_PRIVATE);
 		LogUtil.logDebug(prefs != null ? "Preferences loaded" : "Preferences not loaded", true, true);
 	}
@@ -35,15 +39,15 @@ public class USBDebuggingListenerControl implements IXposedHookZygoteInit, IXpos
 			try {
 				//Change to preference only takes effect when this is called here
 				AndroidAppHelper.reloadSharedPreferencesIfNeeded(prefs);
-				LogUtil.logDebug("Reload SharedPreferences", true, true);
+				LogUtil.logDebug("Reload SharedPreferences", true, false);
 				
 				boolean listenerEnabled = prefs.getBoolean(PREF_ListenerEnabled, true);
-				LogUtil.logDebug(listenerEnabled ? "Listener is enabled" : "Listener is disabled", true, true);
+				LogUtil.logDebug(listenerEnabled ? "Listener is enabled" : "Listener is disabled", true, false);
 				if(!listenerEnabled) {
 //					XC_MethodHook.Unhook methode = XposedHelpers.findAndHookMethod("com.android.server.usb.UsbDebuggingManager", lpparam.classLoader, "listenToSocket", XC_MethodReplacement.DO_NOTHING);
 					// Thanks to Tungstwenty (http://forum.xda-developers.com/member.php?u=4322181)
 					XC_MethodHook.Unhook methode = XposedHelpers.findAndHookMethod("com.android.server.usb.UsbDebuggingManager", lpparam.classLoader, "run", XC_MethodReplacement.DO_NOTHING);
-					LogUtil.logDebug(methode != null ? "Methode found" : "Methode not found", true, true);
+					LogUtil.logDebug(methode != null ? "Methode found" : "Methode not found", true, false);
 				}	
 			}
 			catch (Throwable t) { 
